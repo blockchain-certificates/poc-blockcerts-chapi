@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "rollup -c rollup.iife.config.js -w"
+    "compile": "npm run compile:worker && npm run compile:index",
+    "compile:index": "rollup -c rollup.iife.config.js -w",
+    "compile:worker": "rollup -c rollup.iife.worker.config.js -w"
   },
   "author": "",
   "license": "ISC",

@@ -6,7 +6,7 @@ export default {
   input: 'src/index.ts',
   output: [
     {
-      file: 'lib/chapi-wallet.js',
+      file: 'lib/index.js',
       format: 'iife',
       name: 'ChapiWallet'
     }
