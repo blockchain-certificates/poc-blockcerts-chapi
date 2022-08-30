@@ -4,9 +4,8 @@ import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import * as WebCredentialHandler from 'web-credential-handler';
 
 async function init (): Promise<void> {
-  const MEDIATOR = 'https://authn.io';
   CredentialHandlerPolyfill
-    .loadOnce(MEDIATOR)
+    .loadOnce()
     .then(console.log('Polyfill loaded.'))
     .catch(e => console.error('Error loading polyfill:', e));
 
