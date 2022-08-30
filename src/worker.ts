@@ -1,7 +1,6 @@
 // @ts-ignore
-import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
-// @ts-ignore
 import * as WebCredentialHandler from 'web-credential-handler';
+import { loadPolyfillOnce } from './helpers/loadPolyfillOnce';
 
 enum EventHandlerResultType {
   Response = 'response',
@@ -22,10 +21,8 @@ type EventHandlerResponseType = EventHandlerRedirect | EventHandlerResponse;
 
 async function init (): Promise<void> {
   console.log('Worker page loaded');
-  CredentialHandlerPolyfill
-    .loadOnce()
-    .then(console.log('Polyfill loaded.'))
-    .catch(e => console.error('Error loading polyfill:', e));
+
+  loadPolyfillOnce();
 
   WebCredentialHandler
     .activateHandler({
