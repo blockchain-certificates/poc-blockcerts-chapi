@@ -29,9 +29,8 @@ async function init (): Promise<void> {
       async get (event): Promise<EventHandlerResponseType> {
         console.log('WCH: Received get() event:', event);
         return {
-          type: EventHandlerResultType.Response,
-          data: '',
-          dataType: ''
+          type: EventHandlerResultType.Redirect,
+          url: './wallet-worker-get.html'
         };
       },
       async store(event): Promise<EventHandlerResponseType> {
