@@ -3,7 +3,7 @@ import * as WebCredentialHandler from 'web-credential-handler';
 // @ts-ignore
 import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import { EventHandlerResultType } from './models/EventHandler';
-import cert from './data/testnet-v3-did.json';
+import cert from '../../issuer/data/testnet-v3-did.json';
 import type { EventHandlerResponseType } from './models/EventHandler';
 
 function sendData (credentialHandlerEvent): void {

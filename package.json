@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "npm run compile:worker && npm run compile:index",
+    "compile:issuer": "rollup -c rollup.iife.issuer.config.js -w",
     "compile:verifier": "rollup -c rollup.iife.verifier.config.js -w",
     "compile:wallet": "rollup -c rollup.iife.wallet.config.js -w",
     "compile:wallet:worker": "rollup -c rollup.iife.wallet.worker.config.js -w",
