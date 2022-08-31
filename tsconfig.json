@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "baseUrl": "src",
+    "baseUrl": "wallet",
     "module": "es2015",
     "resolveJsonModule": true,
     "esModuleInterop": true,

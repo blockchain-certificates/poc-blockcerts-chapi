@@ -3,10 +3,10 @@ import serve from 'rollup-plugin-serve';
 import fs from 'fs';
 
 export default {
-  input: 'src/index.ts',
+  input: 'wallet/src/index.ts',
   output: [
     {
-      file: 'lib/index.js',
+      file: 'wallet/lib/index.js',
       format: 'iife',
       name: 'ChapiWallet'
     }
@@ -14,13 +14,13 @@ export default {
   plugins: [
     typescript(),
     serve({
-      contentBase: ['lib', 'browser'],
+      contentBase: ['wallet/lib', 'wallet/browser'],
       host: '0.0.0.0',
       port: 9000,
       open: true,
       https: {
-        cert: fs.readFileSync('https-cert/cert.pem'),
-        key: fs.readFileSync('https-cert/key.pem')
+        cert: fs.readFileSync('wallet/https-cert/cert.pem'),
+        key: fs.readFileSync('wallet/https-cert/key.pem')
       },
       headers: {
         'Access-Control-Allow-Origin': '*'

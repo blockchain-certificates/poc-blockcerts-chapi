@@ -1,10 +1,10 @@
 import typescript from '@rollup/plugin-typescript';
 
 export default {
-  input: 'src/worker.ts',
+  input: 'wallet/src/worker.ts',
   output: [
     {
-      file: 'lib/worker.js',
+      file: 'wallet/lib/worker.js',
       format: 'iife',
       name: 'ChapiWalletWorker'
     }
