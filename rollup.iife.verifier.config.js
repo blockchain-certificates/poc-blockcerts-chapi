@@ -26,6 +26,9 @@ export default {
       https: {
         cert: fs.readFileSync('https-cert/cert.pem'),
         key: fs.readFileSync('https-cert/key.pem')
+      },
+      headers: {
+        'Access-Control-Allow-Origin': '*'
       }
     })
   ]

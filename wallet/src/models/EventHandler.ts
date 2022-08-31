@@ -5,8 +5,8 @@ export enum EventHandlerResultType {
 
 interface EventHandlerResponse {
   type: EventHandlerResultType.Response;
-  dataType: any;
-  data: any;
+  dataType: string;
+  data: string;
 }
 
 interface EventHandlerRedirect {
