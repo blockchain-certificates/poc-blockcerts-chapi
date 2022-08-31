@@ -6,13 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "npm run compile:worker && npm run compile:index",
-    "compile:index": "rollup -c rollup.iife.config.js -w",
-    "compile:worker": "rollup -c rollup.iife.worker.config.js -w",
-    "compile:worker:get": "rollup -c rollup.iife.worker.get.config.js -w"
+    "compile:verifier": "rollup -c rollup.iife.verifier.config.js -w",
+    "compile:wallet": "rollup -c rollup.iife.wallet.config.js -w",
+    "compile:wallet:worker": "rollup -c rollup.iife.wallet.worker.config.js -w",
+    "compile:wallet:worker:get": "rollup -c rollup.iife.wallet.worker.get.config.js -w"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@blockcerts/blockcerts-verifier": "^1.51.0",
     "credential-handler-polyfill": "^3.0.0",
     "web-credential-handler": "^2.0.0"
   },

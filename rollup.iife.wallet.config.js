@@ -19,8 +19,8 @@ export default {
       port: 9000,
       open: true,
       https: {
-        cert: fs.readFileSync('wallet/https-cert/cert.pem'),
-        key: fs.readFileSync('wallet/https-cert/key.pem')
+        cert: fs.readFileSync('https-cert/cert.pem'),
+        key: fs.readFileSync('https-cert/key.pem')
       },
       headers: {
         'Access-Control-Allow-Origin': '*'
