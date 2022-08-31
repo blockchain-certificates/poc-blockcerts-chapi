@@ -1,23 +1,8 @@
 // @ts-ignore
 import * as WebCredentialHandler from 'web-credential-handler';
 import { loadPolyfillOnce } from './helpers/loadPolyfillOnce';
-
-enum EventHandlerResultType {
-  Response = 'response',
-  Redirect = 'redirect'
-}
-interface EventHandlerResponse {
-  type: EventHandlerResultType.Response;
-  dataType: any;
-  data: any;
-}
-
-interface EventHandlerRedirect {
-  type: EventHandlerResultType.Redirect;
-  url: string;
-}
-
-type EventHandlerResponseType = EventHandlerRedirect | EventHandlerResponse;
+import { EventHandlerResultType } from './models/EventHandler';
+import type { EventHandlerResponseType } from './models/EventHandler';
 
 async function init (): Promise<void> {
   console.log('Worker page loaded');

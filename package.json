@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "npm run compile:worker && npm run compile:index",
     "compile:index": "rollup -c rollup.iife.config.js -w",
-    "compile:worker": "rollup -c rollup.iife.worker.config.js -w"
+    "compile:worker": "rollup -c rollup.iife.worker.config.js -w",
+    "compile:worker:get": "rollup -c rollup.iife.worker.get.config.js -w"
   },
   "author": "",
   "license": "ISC",
