@@ -1,28 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const fs = require('fs');
 
 const server = express();
+server.use(cors());
 server.use(bodyParser.json({ limit: '5mb' }));
 
 server.post('/store', function (req, res) {
-  const certificate: string = req.body.certificate;
+  const certificate = req.body.certificate.data;
 
   if (!certificate) {
     console.error('no certificate set to store');
-    return;
+    return res.json({
+      status: 500,
+      statusText: 'No certificate to store'
+    });
   }
 
-  let certificateData;
-  if (typeof certificate === 'string') {
-    certificateData = JSON.parse(certificate);
-  } else if (typeof certificate === 'object') {
-    certificateData = certificate;
-  }
-
-  const fileName = certificateData.id;
-  console.log('storing certificate', fileName);
-  fs.writeFileSync(`./storage/${fileName}.json`, certificate);
+  const fileName = certificate.id;
+  console.log('storing certificate', fileName, 'to path', `${__dirname}/storage/`);
+  fs.writeFileSync(`${__dirname}/storage/${fileName}.json`, JSON.stringify(certificate));
+  return res.json({
+    status: 200,
+    statusText: `Successfully stored certificate with id ${fileName}`
+  })
 });
 
 const port = 4555;

@@ -5,14 +5,24 @@ import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import { EventHandlerResultType } from './models/EventHandler';
 import type { EventHandlerResponseType } from './models/EventHandler';
 
-function storeData (credentialHandlerEvent): void {
-  const cert = credentialHandlerEvent.credential;
-  console.log('ok storing cert', cert);
-  credentialHandlerEvent.respondWith<EventHandlerResponseType>({
-    type: EventHandlerResultType.Response,
-    dataType: 'VerifiableCredential',
-    data: JSON.stringify(cert)
+async function storeData (credentialHandlerEvent): void {
+  const certificate = credentialHandlerEvent.credential;
+  const result = await fetch('http://localhost:4555/store', {
+    method: 'POST',
+    body: JSON.stringify({
+      certificate
+    }),
+    headers: { 'Content-Type': 'application/json' }
   });
+  if (result.status === 200) {
+    credentialHandlerEvent.respondWith<EventHandlerResponseType>({
+      type: EventHandlerResultType.Response,
+      dataType: 'VerifiableCredential',
+      data: JSON.stringify(certificate)
+    });
+  } else {
+    console.error(result);
+  }
 }
 
 async function handleStoreEvent () {
