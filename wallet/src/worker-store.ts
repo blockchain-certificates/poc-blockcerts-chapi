@@ -13,7 +13,8 @@ async function storeData (credentialHandlerEvent): void {
       certificate
     }),
     headers: { 'Content-Type': 'application/json' }
-  });
+  }).then(response => response.json());
+
   if (result.status === 200) {
     credentialHandlerEvent.respondWith<EventHandlerResponseType>({
       type: EventHandlerResultType.Response,

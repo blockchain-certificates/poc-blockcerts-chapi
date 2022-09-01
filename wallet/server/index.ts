@@ -24,7 +24,25 @@ server.post('/store', function (req, res) {
   return res.json({
     status: 200,
     statusText: `Successfully stored certificate with id ${fileName}`
-  })
+  });
+});
+
+server.get('/get', function (req, res) {
+  const fileName = req.query.id;
+  console.log('looking up certificate with id', req.query.id);
+  const data = fs.readFileSync(`${__dirname}/storage/${fileName}.json`, { encoding:'utf8' });
+  if (data) {
+    console.log('found certificate');
+    return res.json({
+      status: 200,
+      certificate: data
+    });
+  } else {
+    console.error('no certificate found');
+    return res.json({
+      status: 400
+    });
+  }
 });
 
 const port = 4555;
