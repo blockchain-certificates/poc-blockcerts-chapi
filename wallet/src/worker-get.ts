@@ -5,9 +5,9 @@ import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import { EventHandlerResultType } from './models/EventHandler';
 import type { EventHandlerResponseType } from './models/EventHandler';
 
-async function sendData (credentialHandlerEvent): Promise<void> {
+async function sendData (credentialHandlerEvent, id): Promise<void> {
   const serverUrl = new URL('http://localhost:4555/get');
-  serverUrl.searchParams.append('id', 'urn:uuid:13172c8c-efa5-49e1-9f69-a67ba6bd9937');
+  serverUrl.searchParams.append('id', id);
   const result = await fetch(serverUrl.toString(), {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -35,7 +35,7 @@ function createDefinitionEntry (listItem, property): HTMLElement {
   return wrapper;
 }
 
-function displayList (list): void {
+function displayList (list, credentialHandlerEvent): void {
   const root = document.getElementsByClassName('js-credential-list')[0];
   for (const entry of list) {
     const definitionList = document.createElement('dl');
@@ -59,7 +59,9 @@ function displayList (list): void {
     }
     children.forEach(child => definitionList.appendChild(child));
     const listItem = document.createElement('li');
+    listItem.classList.add('c-credential');
     listItem.appendChild(definitionList);
+    listItem.addEventListener('click', sendData.bind(null, credentialHandlerEvent, entry.id));
     root.appendChild(listItem);
   }
 }
@@ -72,16 +74,14 @@ async function handleGetEvent () {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   }).then(res => res.json());
-  console.log(result);
   const availableCredentials = result.list;
 
   if (availableCredentials?.length) {
-    displayList(availableCredentials);
+    displayList(availableCredentials, credentialHandlerEvent);
+  } else {
+    const listWrapper = document.getElementsByClassName('js-credential-list-wrapper')[0];
+    listWrapper.innerText = 'No credential stored in this wallet';
   }
-
-  document
-    .getElementsByClassName('js-share-ok')[0]
-    .addEventListener('click', sendData.bind(null, credentialHandlerEvent));
 }
 
 async function init (): Promise<void> {

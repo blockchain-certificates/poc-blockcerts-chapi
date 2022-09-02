@@ -3,11 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Get credential</title>
+    <style>
+        .c-credential-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .c-credential {
+            display: block;
+            width: 100%;
+        }
+
+        .c-credential:hover {
+            cursor: pointer;
+            background-color: aqua;
+        }
+    </style>
 </head>
 <body>
-    <h1>Do you wish to share the credential?</h1>
-    <ul class="js-credential-list"></ul>
-    <button class="js-share-ok">Ok</button>
+    <h1>This verifier is asking for a credential</h1>
+    <div class="js-credential-list-wrapper">
+        <h3>Choose credential to share</h3>
+        <ul class="js-credential-list c-credential-list"></ul>
+    </div>
 
     <script src="./worker-get.js"></script>
 </body>
