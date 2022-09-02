@@ -7,6 +7,8 @@ const server = express();
 server.use(cors());
 server.use(bodyParser.json({ limit: '5mb' }));
 
+const STORAGE_DIRECTORY = `${__dirname}/storage`;
+
 server.post('/store', function (req, res) {
   const certificate = req.body.certificate.data;
 
@@ -20,7 +22,7 @@ server.post('/store', function (req, res) {
 
   const fileName = certificate.id;
   console.log('storing certificate', fileName, 'to path', `${__dirname}/storage/`);
-  fs.writeFileSync(`${__dirname}/storage/${fileName}.json`, JSON.stringify(certificate));
+  fs.writeFileSync(`${STORAGE_DIRECTORY}/${fileName}.json`, JSON.stringify(certificate));
   return res.json({
     status: 200,
     statusText: `Successfully stored certificate with id ${fileName}`
@@ -30,7 +32,7 @@ server.post('/store', function (req, res) {
 server.get('/get', function (req, res) {
   const fileName = req.query.id;
   console.log('looking up certificate with id', req.query.id);
-  const data = fs.readFileSync(`${__dirname}/storage/${fileName}.json`, { encoding:'utf8' });
+  const data = fs.readFileSync(`${STORAGE_DIRECTORY}/${fileName}.json`, { encoding:'utf8' });
   if (data) {
     console.log('found certificate');
     return res.json({
@@ -43,6 +45,25 @@ server.get('/get', function (req, res) {
       status: 400
     });
   }
+});
+
+server.get('/list', function (req, res) {
+  const files = fs.readdirSync(`${STORAGE_DIRECTORY}`);
+  const fileList = [];
+  for (const file of files) {
+    const data = JSON.parse(fs.readFileSync(`${STORAGE_DIRECTORY}/${file}`, { encoding:'utf8' }));
+    fileList.push({
+      name: data.credentialSubject.claim.name,
+      id: data.id,
+      issuerName: data.issuer.name,
+      issuanceDate: data.issuanceDate
+    })
+  }
+
+  return res.json({
+    status: 200,
+    list: fileList
+  });
 });
 
 const port = 4555;
