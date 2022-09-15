@@ -34,7 +34,7 @@ async function storeToDevice(credentialHandlerEvent): Promise<void> {
     _preferPolyfill: false,
     suggestedName: `${certificate.credentialSubject?.claim?.name ?? certificate.id}.json`,
     types: [
-      { accept: { 'text/json': [ 'json' ] } }
+      { accept: { 'text/json': [ '.json' ] } }
     ],
     excludeAcceptAllOption: false // default
   });

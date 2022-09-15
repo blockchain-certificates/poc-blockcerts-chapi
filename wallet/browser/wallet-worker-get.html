@@ -22,11 +22,16 @@
 </head>
 <body>
     <h1>This verifier is asking for a credential</h1>
+    <div>Get file from device: <input
+        type="file"
+        accept=".json"
+        class="js-get-from-device"
+    /></div>
     <div class="js-credential-list-wrapper">
         <h3>Choose credential to share</h3>
         <ul class="js-credential-list c-credential-list"></ul>
     </div>
 
-    <script src="./worker-get.js"></script>
+    <script src="./get/worker-get.js" type="module"></script>
 </body>
 </html>

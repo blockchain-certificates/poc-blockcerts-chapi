@@ -1,17 +1,20 @@
 import typescript from '@rollup/plugin-typescript';
-import json from '@rollup/plugin-json';
+import deleteDir from 'rollup-plugin-delete';
 
+const outputDir = 'wallet/lib/get';
 export default {
   input: 'wallet/src/worker-get.ts',
   output: [
     {
-      file: 'wallet/lib/worker-get.js',
-      format: 'iife',
+      dir: outputDir,
+      format: 'esm',
       name: 'ChapiWalletWorkerGet'
     }
   ],
   plugins: [
-    typescript(),
-    json()
+    deleteDir({
+      targets: outputDir
+    }),
+    typescript()
   ]
 };

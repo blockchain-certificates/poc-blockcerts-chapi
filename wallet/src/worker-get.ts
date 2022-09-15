@@ -3,6 +3,7 @@ import * as WebCredentialHandler from 'web-credential-handler';
 // @ts-ignore
 import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import { EventHandlerResultType } from './models/EventHandler';
+import * as NativeFileSystemAdapter from 'native-file-system-adapter';
 import type { EventHandlerResponseType } from './models/EventHandler';
 
 async function sendData (credentialHandlerEvent, id): Promise<void> {
@@ -14,6 +15,7 @@ async function sendData (credentialHandlerEvent, id): Promise<void> {
   }).then(response => response.json());
 
   if (result.status === 200) {
+    // @ts-ignore
     credentialHandlerEvent.respondWith<EventHandlerResponseType>({
       type: EventHandlerResultType.Response,
       dataType: 'VerifiableCredential',
@@ -22,6 +24,20 @@ async function sendData (credentialHandlerEvent, id): Promise<void> {
   } else {
     console.error(result);
   }
+}
+
+async function getFromDevice (credentialHandlerEvent, e): Promise<void> {
+  const [file] = e.target.files;
+  const reader = new FileReader();
+  reader.addEventListener('load', () => {
+    // @ts-ignore
+    credentialHandlerEvent.respondWith<EventHandlerResponseType>({
+      type: EventHandlerResultType.Response,
+      dataType: 'VerifiableCredential',
+      data: reader.result
+    });
+  }, false);
+  reader.readAsText(file);
 }
 
 function createDefinitionEntry (listItem, property): HTMLElement {
@@ -76,11 +92,14 @@ async function handleGetEvent () {
   }).then(res => res.json());
   const availableCredentials = result.list;
 
+  document.getElementsByClassName('js-get-from-device')[0]
+    .addEventListener('change', getFromDevice.bind(null, credentialHandlerEvent));
+
   if (availableCredentials?.length) {
     displayList(availableCredentials, credentialHandlerEvent);
   } else {
     const listWrapper = document.getElementsByClassName('js-credential-list-wrapper')[0];
-    listWrapper.innerText = 'No credential stored in this wallet';
+    (listWrapper as HTMLElement).innerText = 'No credential stored in this wallet';
   }
 }
 
