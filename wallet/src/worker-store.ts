@@ -42,7 +42,6 @@ async function storeToDevice(credentialHandlerEvent): Promise<void> {
   const writer = await fileHandle.createWritable();
   await writer.write(JSON.stringify(certificate));
   await writer.close();
-  console.log('closing');
   // @ts-ignore
   credentialHandlerEvent.respondWith<EventHandlerResponseType>({
     type: EventHandlerResultType.Response,
