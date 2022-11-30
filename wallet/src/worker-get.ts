@@ -3,8 +3,10 @@ import * as WebCredentialHandler from 'web-credential-handler';
 // @ts-ignore
 import * as CredentialHandlerPolyfill from 'credential-handler-polyfill';
 import { EventHandlerResultType } from './models/EventHandler';
-import * as NativeFileSystemAdapter from 'native-file-system-adapter';
 import type { EventHandlerResponseType } from './models/EventHandler';
+import selectivelyDiscloseData from "./helpers/selectivelyDiscloseData";
+
+const BBS_PLUS_SIGNATURE = 'BbsBlsSignature2020';
 
 async function sendData (credentialHandlerEvent, id): Promise<void> {
   const serverUrl = new URL('http://localhost:4555/get');
@@ -15,6 +17,12 @@ async function sendData (credentialHandlerEvent, id): Promise<void> {
   }).then(response => response.json());
 
   if (result.status === 200) {
+    const certData = JSON.parse(result.certificate);
+    if (certData.proof.type === BBS_PLUS_SIGNATURE) {
+      // TODO: do not keep this here, split get credential and send credential to plug this part in between
+      const data = await selectivelyDiscloseData(certData);
+      return;
+    }
     // @ts-ignore
     credentialHandlerEvent.respondWith<EventHandlerResponseType>({
       type: EventHandlerResultType.Response,

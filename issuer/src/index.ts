@@ -1,4 +1,4 @@
-import certificate from '../data/testnet-v3-did.json';
+import certificate from '../data/cert-bbs-plus.json';
 import { loadPolyfillOnce } from '../../wallet/src/helpers/loadPolyfillOnce';
 // @ts-ignore
 import { WebCredential } from 'credential-handler-polyfill';

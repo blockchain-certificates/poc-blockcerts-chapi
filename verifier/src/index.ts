@@ -12,7 +12,7 @@ interface CredentialRequestOptions {
 
 function verifyCredential (credential) {
   const verifier = document.getElementsByClassName('js-verifier')[0];
-  verifier.src = credential;
+  (verifier as any).src = credential;
 }
 
 function init () {
@@ -28,7 +28,7 @@ function init () {
           VerifiableCredential: true
         }
       };
-      const webCredential: EventHandlerResponseType = await navigator.credentials.get(credentialQuery);
+      const webCredential: any = await navigator.credentials.get(credentialQuery as any);
       verifyCredential(webCredential.data);
     });
 }
