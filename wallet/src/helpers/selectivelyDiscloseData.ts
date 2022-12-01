@@ -32,7 +32,9 @@ function createCloseButton (): Element {
 function createDisclosableCert (e) {
   e.preventDefault();
   e.stopPropagation();
-  console.log(e);
+  const checked = e.target.querySelectorAll('input[type="checkbox"]:checked');
+  const values = Array.from(checked).map(checkbox => (checkbox as any).value);
+  console.log(values);
 }
 
 function createSubmitButton (): Element {
