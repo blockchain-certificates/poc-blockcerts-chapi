@@ -12,29 +12,34 @@ function getDisclosableData (claim): DisclosableData[] {
   });
 }
 
-function displayDisclosableData (data: DisclosableData[]) {
-  const anchor = document.getElementsByClassName('js-selective-disclosure')[0];
+function displayDisclosableData (data: DisclosableData[], anchorElement: Element) {
   const list = document.createElement('ul');
   data.forEach(entry => {
     const listItem = document.createElement('li');
     const label = document.createElement('label');
-    label.innerText = entry.value;
     const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.value = entry.key;
-    checkbox.id = entry.key;
-    label.htmlFor = entry.key;
-    label.appendChild(checkbox);
-    listItem.appendChild(label);
+    if (typeof entry.value === "object") {
+      label.innerText = entry.key;
+      listItem.appendChild(label)
+      displayDisclosableData(getDisclosableData(entry.value), listItem);
+    } else {
+      checkbox.type = 'checkbox';
+      checkbox.value = entry.key;
+      checkbox.id = entry.key;
+      label.htmlFor = entry.key;
+      label.innerText = entry.value;
+      label.prepend(checkbox);
+      listItem.appendChild(label);
+    }
     list.appendChild(listItem);
   });
-  anchor.appendChild(list);
-  anchor.classList.remove('hidden');
-  anchor.classList.add('visible');
+  anchorElement.appendChild(list);
 }
 
 export default async function selectivelyDiscloseData (certificate) {
-  console.log(certificate);
   const disclosableData = getDisclosableData(certificate.credentialSubject);
-  displayDisclosableData(disclosableData);
+  const anchorElement = document.getElementsByClassName('js-selective-disclosure')[0];
+  anchorElement.classList.remove('hidden');
+  anchorElement.classList.add('visible');
+  displayDisclosableData(disclosableData, anchorElement);
 }
