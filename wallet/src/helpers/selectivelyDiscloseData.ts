@@ -61,7 +61,7 @@ function makeModal (contentElement: Element): void {
   contentElement.append(submitButton);
 }
 
-function displayDisclosableData (data: DisclosableData[], anchorElement: Element, useModal = true) {
+function displayDisclosableData (data: DisclosableData[], anchorElement: Element, useModal = true, parentLabel: string = '') {
   const list = document.createElement('ul');
   data.forEach(entry => {
     const listItem = document.createElement('li');
@@ -70,12 +70,13 @@ function displayDisclosableData (data: DisclosableData[], anchorElement: Element
     if (typeof entry.value === "object") {
       label.innerText = entry.key;
       listItem.appendChild(label);
-      displayDisclosableData(getDisclosableData(entry.value), listItem, false);
+      parentLabel = entry.key;
+      displayDisclosableData(getDisclosableData(entry.value), listItem, false, parentLabel);
     } else {
       checkbox.type = 'checkbox';
-      checkbox.value = entry.key;
-      checkbox.id = entry.key;
-      label.htmlFor = entry.key;
+      checkbox.value = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
+      checkbox.id = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
+      label.htmlFor = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
       label.innerText = entry.value;
       label.prepend(checkbox);
       listItem.appendChild(label);
