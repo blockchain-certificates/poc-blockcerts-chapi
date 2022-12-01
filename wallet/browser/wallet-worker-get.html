@@ -18,12 +18,6 @@
             cursor: pointer;
             background-color: aqua;
         }
-        .hidden {
-            display: none;
-        }
-        .visible {
-            display: block;
-        }
         .modal {
             position: fixed;
             top: 0%;
@@ -39,6 +33,12 @@
             background-color: #fff;
             padding: 25px;
         }
+        .hidden {
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +51,7 @@
     <div class="js-credential-list-wrapper">
         <h3>Choose credential to share</h3>
         <ul class="js-credential-list c-credential-list"></ul>
-        <div class="js-selective-disclosure hidden"></div>
+        <form class="js-selective-disclosure hidden"></form>
     </div>
 
     <script src="./get/worker-get.js" type="module"></script>
