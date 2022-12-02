@@ -72,13 +72,23 @@ function createRevealDocument (keys: string[]): any {
   return VCTemplate;
 }
 
-function createDisclosableCert (e) {
+async function createDisclosableCert (signedDocument, e) {
   e.preventDefault();
   e.stopPropagation();
   const checked = e.target.querySelectorAll('input[type="checkbox"]:checked');
   const chosenKeys = Array.from(checked).map(checkbox => (checkbox as any).value);
   const revealDocument = createRevealDocument(chosenKeys);
   console.log(revealDocument);
+
+  const { derivedDocument } = await fetch('http://localhost:4666/derive', {
+    method: 'POST',
+    body: JSON.stringify({
+      revealDocument,
+      signedDocument
+    })
+  }).then(res => res.json());
+
+  console.log(derivedDocument);
 }
 
 function createSubmitButton (): Element {
@@ -105,7 +115,19 @@ function makeModal (contentElement: Element): void {
   contentElement.append(submitButton);
 }
 
-function displayDisclosableData (data: DisclosableData[], anchorElement: Element, useModal = true, parentLabel: string = '') {
+function displayDisclosableData ({
+   data,
+   anchorElement,
+   useModal = true,
+   parentLabel = '',
+   signedDocument
+  }: {
+    data: DisclosableData[];
+    anchorElement: Element;
+    useModal?: boolean;
+    parentLabel?: string;
+    signedDocument?: any;
+  }) {
   const list = document.createElement('ul');
   data.forEach(entry => {
     const listItem = document.createElement('li');
@@ -115,7 +137,12 @@ function displayDisclosableData (data: DisclosableData[], anchorElement: Element
       label.innerText = entry.key;
       listItem.appendChild(label);
       parentLabel = entry.key;
-      displayDisclosableData(getDisclosableData(entry.value), listItem, false, parentLabel);
+      displayDisclosableData({
+        data: getDisclosableData(entry.value),
+        anchorElement: listItem,
+        useModal: false,
+        parentLabel
+      });
     } else {
       checkbox.type = 'checkbox';
       // TODO: next 3 lines . should be a constant variable
@@ -129,7 +156,7 @@ function displayDisclosableData (data: DisclosableData[], anchorElement: Element
     list.appendChild(listItem);
   });
   if (useModal === true) {
-    anchorElement.addEventListener('submit', createDisclosableCert, false);
+    anchorElement.addEventListener('submit', createDisclosableCert.bind(null, signedDocument), false);
     makeModal(list);
   }
   anchorElement.appendChild(list);
@@ -140,5 +167,9 @@ export default async function selectivelyDiscloseData (certificate) {
   const anchorElement = document.getElementsByClassName('js-selective-disclosure')[0];
   anchorElement.classList.remove('hidden');
   anchorElement.classList.add('visible', 'modal');
-  displayDisclosableData(disclosableData, anchorElement);
+  displayDisclosableData({
+    data: disclosableData,
+    anchorElement,
+    signedDocument: certificate
+  });
 }
