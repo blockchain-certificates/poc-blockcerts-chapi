@@ -29,12 +29,56 @@ function createCloseButton (): Element {
   return closeButton;
 }
 
+function createRevealDocument (keys: string[]): any {
+  const EXPLICIT_KEY = '@explicit';
+  const VCTemplate = {
+    // TODO: context should be reused from original document
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://w3id.org/blockcerts/v3",
+      "https://w3id.org/security/bbs/v1"
+    ],
+    // TODO: type should be reused from original document
+    "type": ["VerifiableCredential", "BlockcertsCredential"],
+    "credentialSubject": {
+      "@explicit": true
+    }
+  }
+  keys.forEach(key => {
+    // TODO: . should be a constant variable
+    if (!key.includes('.')) {
+      if (!VCTemplate.credentialSubject[EXPLICIT_KEY]) {
+        VCTemplate.credentialSubject[EXPLICIT_KEY] = true;
+      }
+       VCTemplate.credentialSubject[key] = {}
+    } else {
+      let current = VCTemplate.credentialSubject;
+      // TODO: . should be a constant variable
+      for (const pathItem of key.split('.')) {
+        if (pathItem !== '') {
+          if (!(pathItem in current)) {
+            if (!current[EXPLICIT_KEY]) {
+              current[EXPLICIT_KEY] = true;
+            }
+            current[pathItem] = {};
+          }
+
+          current = current[pathItem];
+        }
+      }
+    }
+  });
+
+  return VCTemplate;
+}
+
 function createDisclosableCert (e) {
   e.preventDefault();
   e.stopPropagation();
   const checked = e.target.querySelectorAll('input[type="checkbox"]:checked');
-  const values = Array.from(checked).map(checkbox => (checkbox as any).value);
-  console.log(values);
+  const chosenKeys = Array.from(checked).map(checkbox => (checkbox as any).value);
+  const revealDocument = createRevealDocument(chosenKeys);
+  console.log(revealDocument);
 }
 
 function createSubmitButton (): Element {
@@ -74,6 +118,7 @@ function displayDisclosableData (data: DisclosableData[], anchorElement: Element
       displayDisclosableData(getDisclosableData(entry.value), listItem, false, parentLabel);
     } else {
       checkbox.type = 'checkbox';
+      // TODO: next 3 lines . should be a constant variable
       checkbox.value = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
       checkbox.id = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
       label.htmlFor = parentLabel ? `${parentLabel}.${entry.key}` : entry.key;
