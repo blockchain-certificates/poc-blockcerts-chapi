@@ -6,7 +6,8 @@ import { EventHandlerResultType } from './models/EventHandler';
 import type { EventHandlerResponseType } from './models/EventHandler';
 import selectivelyDiscloseData from "./helpers/selectivelyDiscloseData";
 
-const BBS_PLUS_SIGNATURE = 'BbsBlsSignature2020';
+export const BBS_PLUS_SIGNATURE = 'BbsBlsSignature2020';
+export const BBS_PLUS_DERIVED_SIGNATURE = 'BbsBlsSignatureProof2020';
 
 async function sendData (credentialHandlerEvent, id): Promise<void> {
   const serverUrl = new URL('http://localhost:4555/get');

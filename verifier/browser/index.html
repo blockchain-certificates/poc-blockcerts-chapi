@@ -6,10 +6,17 @@
     <script src="./custom-elements-es5-adapter.js"></script>
     <script src="./webcomponents-loader.js"></script>
     <script src="./blockcerts-verifier/dist/main.js"></script>
+    <style>
+        .u-margin-bottom {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Share your credential to verify it</h1>
-    <button class="js-share-credential-btn">Share my credential</button>
+    <button class="js-share-credential-btn u-margin-bottom">Share my credential</button>
+
+    <div class="js-bbs-plus-handler u-margin-bottom"></div>
 
     <blockcerts-verifier display-mode="fullscreen" clickable-urls="true" class="js-verifier"></blockcerts-verifier>
     <script src="./index.js"></script>

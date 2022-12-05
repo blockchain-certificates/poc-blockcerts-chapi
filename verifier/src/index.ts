@@ -1,6 +1,7 @@
 import { loadPolyfillOnce } from '../../wallet/src/helpers/loadPolyfillOnce';
-import { BBS_PLUS_DERIVED_SIGNATURE } from '../../wallet/lib/get/worker-get';
+import { BBS_PLUS_DERIVED_SIGNATURE } from '../../wallet/src/worker-get';
 import verifyDerivedBBSPlus from './verify-derived-bbs-plus';
+import {createEvalAwarePartialHost} from "ts-node/dist/repl";
 
 interface CredentialRequestOptions {
   web: {
@@ -11,11 +12,18 @@ interface CredentialRequestOptions {
   };
 }
 
-function verifyCredential (credential) {
+async function verifyCredential (credential) {
   const parsedCredential = JSON.parse(credential);
-  console.log('pass this to verifier', credential);
   if (parsedCredential.proof.type === BBS_PLUS_DERIVED_SIGNATURE) {
-    verifyDerivedBBSPlus(credential);
+    const status = await verifyDerivedBBSPlus(credential);
+    console.log(status);
+    const contentDiv = document.getElementsByClassName('js-bbs-plus-handler')[0];
+    const certContentElement = document.createElement('pre');
+    certContentElement.innerText = JSON.stringify(parsedCredential, null, 2);
+    contentDiv.append(certContentElement);
+    const verificationStatusElement = document.createElement('b');
+    verificationStatusElement.innerText = `This ${parsedCredential.proof.type} document was verified: ${status.verified}`;
+    contentDiv.prepend(verificationStatusElement);
     return;
   }
   const verifier = document.getElementsByClassName('js-verifier')[0];
