@@ -32,9 +32,18 @@
             margin: auto;
             background-color: #fff;
             padding: 25px;
+            height: 100%;
+            overflow: auto;
+            box-sizing: border-box;
         }
         .hidden {
-            display: none;
+            position: absolute !important;
+            clip: rect(1px, 1px, 1px, 1px);
+            padding: 0 !important;
+            border: 0 !important;
+            height: 1px !important;
+            width: 1px !important;
+            overflow: hidden;
         }
         .visible {
             display: flex;
@@ -51,7 +60,10 @@
     <div class="js-credential-list-wrapper">
         <h3>Choose credential to share</h3>
         <ul class="js-credential-list c-credential-list"></ul>
-        <form class="js-selective-disclosure hidden"></form>
+        <div class="js-selective-disclosure hidden">
+            <form class="js-selective-disclosure__form modal__content"></form>
+            <pre class="js-selective-disclosure__data modal__content"></pre>
+        </div>
     </div>
 
     <script src="./get/worker-get.js" type="module"></script>

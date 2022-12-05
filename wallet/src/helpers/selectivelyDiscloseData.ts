@@ -107,7 +107,6 @@ function createModalTitle (): Element {
 }
 
 function makeModal (contentElement: Element): void {
-  contentElement.classList.add('modal__content');
   const title = createModalTitle();
   const closeButton = createCloseButton();
   const submitButton = createSubmitButton();
@@ -169,11 +168,48 @@ function displayDisclosableData ({
   anchorElement.appendChild(list);
 }
 
+function handleTabChange (e) {
+  const targetTab = e.target.getAttribute('data-target');
+  const targetElement = document.getElementsByClassName(targetTab)[0];
+  const otherTabs = document.getElementsByClassName('js-tab')
+  Array.from(otherTabs).forEach(tab => tab.classList.add('hidden'));
+  targetElement.classList.remove('hidden');
+}
+
+function createTabs (elements: any[], targetElement: Element) {
+  const tabList = document.createElement('menu');
+  elements.forEach((el, index) => {
+    const { element, title } = el;
+    const switchElement = document.createElement('button');
+    switchElement.innerText = title;
+    const generalTabClass = 'js-tab';
+    const targetClass = `tab-content-${title.toLowerCase().replace(' ', '-')}`;
+    switchElement.setAttribute('data-target', targetClass);
+    element.classList.add(targetClass, generalTabClass);
+    switchElement.addEventListener('click', handleTabChange, false);
+    if (index > 0) {
+      element.classList.add('hidden');
+    }
+    tabList.append(switchElement)
+  });
+  targetElement.prepend(tabList);
+}
+
 export default async function selectivelyDiscloseData (certificate, derivationCb) {
   const disclosableData = getDisclosableData(certificate.credentialSubject);
-  const anchorElement = document.getElementsByClassName('js-selective-disclosure')[0];
-  anchorElement.classList.remove('hidden');
-  anchorElement.classList.add('visible', 'modal');
+  const modalElement = document.getElementsByClassName('js-selective-disclosure')[0];
+  const anchorElement = document.getElementsByClassName('js-selective-disclosure__form')[0];
+  const dataElement = document.getElementsByClassName('js-selective-disclosure__data')[0];
+  dataElement.innerHTML = JSON.stringify(certificate, null, 2);
+  modalElement.classList.remove('hidden');
+  modalElement.classList.add('visible', 'modal');
+  createTabs([{
+    element: anchorElement,
+    title: 'Select data'
+  }, {
+    element: dataElement,
+    title: 'Raw data'
+  }], modalElement);
   displayDisclosableData({
     data: disclosableData,
     anchorElement,
