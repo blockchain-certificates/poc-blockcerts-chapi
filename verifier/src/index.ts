@@ -1,5 +1,6 @@
 import { loadPolyfillOnce } from '../../wallet/src/helpers/loadPolyfillOnce';
-import type { EventHandlerResponseType } from '../../wallet/src/models/EventHandler';
+import { BBS_PLUS_DERIVED_SIGNATURE } from '../../wallet/lib/get/worker-get';
+import verifyDerivedBBSPlus from './verify-derived-bbs-plus';
 
 interface CredentialRequestOptions {
   web: {
@@ -11,7 +12,12 @@ interface CredentialRequestOptions {
 }
 
 function verifyCredential (credential) {
+  const parsedCredential = JSON.parse(credential);
   console.log('pass this to verifier', credential);
+  if (parsedCredential.proof.type === BBS_PLUS_DERIVED_SIGNATURE) {
+    verifyDerivedBBSPlus(credential);
+    return;
+  }
   const verifier = document.getElementsByClassName('js-verifier')[0];
   (verifier as any).src = credential;
 }
