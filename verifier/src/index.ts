@@ -11,6 +11,7 @@ interface CredentialRequestOptions {
 }
 
 function verifyCredential (credential) {
+  console.log('pass this to verifier', credential);
   const verifier = document.getElementsByClassName('js-verifier')[0];
   (verifier as any).src = credential;
 }

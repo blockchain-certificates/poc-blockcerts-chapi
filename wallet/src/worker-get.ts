@@ -20,7 +20,15 @@ async function sendData (credentialHandlerEvent, id): Promise<void> {
     const certData = JSON.parse(result.certificate);
     if (certData.proof.type === BBS_PLUS_SIGNATURE) {
       // TODO: do not keep this here, split get credential and send credential to plug this part in between
-      const data = await selectivelyDiscloseData(certData);
+      function certDerivedCallback (derivedCert) {
+        // @ts-ignore
+        credentialHandlerEvent.respondWith<EventHandlerResponseType>({
+          type: EventHandlerResultType.Response,
+          dataType: 'VerifiableCredential',
+          data: derivedCert
+        });
+      }
+      const data = await selectivelyDiscloseData(certData, certDerivedCallback);
       console.log(data);
       return;
     }

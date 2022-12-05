@@ -72,7 +72,7 @@ function createRevealDocument (keys: string[]): any {
   return VCTemplate;
 }
 
-async function createDisclosableCert (signedDocument, e) {
+async function createDisclosableCert (signedDocument, cb, e) {
   e.preventDefault();
   e.stopPropagation();
   const checked = e.target.querySelectorAll('input[type="checkbox"]:checked');
@@ -89,6 +89,7 @@ async function createDisclosableCert (signedDocument, e) {
   }).then(res => res.json());
 
   console.log(derivedDocument);
+  cb(JSON.stringify(derivedDocument));
 }
 
 function createSubmitButton (): Element {
@@ -120,13 +121,15 @@ function displayDisclosableData ({
    anchorElement,
    useModal = true,
    parentLabel = '',
-   signedDocument
+   signedDocument,
+   derivationCb
   }: {
     data: DisclosableData[];
     anchorElement: Element;
     useModal?: boolean;
     parentLabel?: string;
     signedDocument?: any;
+    derivationCb?: (derivedCert: any) => any
   }) {
   const list = document.createElement('ul');
   data.forEach(entry => {
@@ -156,13 +159,17 @@ function displayDisclosableData ({
     list.appendChild(listItem);
   });
   if (useModal === true) {
-    anchorElement.addEventListener('submit', createDisclosableCert.bind(null, signedDocument), false);
+    anchorElement.addEventListener(
+      'submit',
+      createDisclosableCert.bind(null, signedDocument, derivationCb),
+      false
+    );
     makeModal(list);
   }
   anchorElement.appendChild(list);
 }
 
-export default async function selectivelyDiscloseData (certificate) {
+export default async function selectivelyDiscloseData (certificate, derivationCb) {
   const disclosableData = getDisclosableData(certificate.credentialSubject);
   const anchorElement = document.getElementsByClassName('js-selective-disclosure')[0];
   anchorElement.classList.remove('hidden');
@@ -170,6 +177,7 @@ export default async function selectivelyDiscloseData (certificate) {
   displayDisclosableData({
     data: disclosableData,
     anchorElement,
-    signedDocument: certificate
+    signedDocument: certificate,
+    derivationCb
   });
 }
