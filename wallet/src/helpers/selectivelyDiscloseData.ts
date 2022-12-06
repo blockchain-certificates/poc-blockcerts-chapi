@@ -178,10 +178,12 @@ function handleTabChange (e) {
 
 function createTabs (elements: any[], targetElement: Element) {
   const tabList = document.createElement('menu');
+  tabList.classList.add('c-tab-menu', 'modal__content');
   elements.forEach((el, index) => {
     const { element, title } = el;
     const switchElement = document.createElement('button');
     switchElement.innerText = title;
+    switchElement.classList.add('c-tab-button');
     const generalTabClass = 'js-tab';
     const targetClass = `tab-content-${title.toLowerCase().replace(' ', '-')}`;
     switchElement.setAttribute('data-target', targetClass);

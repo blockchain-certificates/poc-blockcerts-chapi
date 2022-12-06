@@ -20,12 +20,13 @@
         }
         .modal {
             position: fixed;
-            top: 0%;
-            left: 0%;
+            top: 0;
+            left: 0;
             background-color: rgba(0,0,0,.3);
             height: 100%;
             width: 100%;
             display: flex;
+            flex-direction: column;
         }
         .modal__content {
             align-self: center;
@@ -35,6 +36,20 @@
             height: 100%;
             overflow: auto;
             box-sizing: border-box;
+            width: 100%;
+            max-width: 80vh;
+        }
+        .c-tab-menu {
+            display: flex;
+            padding: 0;
+            height: auto;
+        }
+        .c-tab-button {
+            width: 50%;
+            border: 1px;
+            height: 40px;
+            border-radius: 0;
+            background-color: #fff;
         }
         .hidden {
             position: absolute !important;
