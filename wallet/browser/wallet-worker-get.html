@@ -40,16 +40,22 @@
             max-width: 80vh;
         }
         .c-tab-menu {
-            display: flex;
-            padding: 0;
+            padding: 0 0 6px;
             height: auto;
         }
         .c-tab-button {
             width: 50%;
-            border: 1px;
+            border: none;
             height: 40px;
             border-radius: 0;
             background-color: #fff;
+            border-right: 1px solid;
+        }
+        .c-tab-button:last-child {
+            border-right: none;
+        }
+        .c-tab-button.is-inactive {
+            border-bottom: 1px solid;
         }
         .hidden {
             position: absolute !important;

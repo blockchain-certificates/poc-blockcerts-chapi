@@ -169,10 +169,14 @@ function displayDisclosableData ({
 }
 
 function handleTabChange (e) {
-  const targetTab = e.target.getAttribute('data-target');
+  const targetButton = e.target;
+  const targetTab = targetButton.getAttribute('data-target');
   const targetElement = document.getElementsByClassName(targetTab)[0];
   const otherTabs = document.getElementsByClassName('js-tab')
   Array.from(otherTabs).forEach(tab => tab.classList.add('hidden'));
+  const otherTabButtons = document.getElementsByClassName('js-tab-button');
+  Array.from(otherTabButtons).forEach(button => button.classList.add('is-inactive'));
+  targetButton.classList.remove('is-inactive');
   targetElement.classList.remove('hidden');
 }
 
@@ -183,7 +187,7 @@ function createTabs (elements: any[], targetElement: Element) {
     const { element, title } = el;
     const switchElement = document.createElement('button');
     switchElement.innerText = title;
-    switchElement.classList.add('c-tab-button');
+    switchElement.classList.add('js-tab-button', 'c-tab-button');
     const generalTabClass = 'js-tab';
     const targetClass = `tab-content-${title.toLowerCase().replace(' ', '-')}`;
     switchElement.setAttribute('data-target', targetClass);
@@ -191,6 +195,7 @@ function createTabs (elements: any[], targetElement: Element) {
     switchElement.addEventListener('click', handleTabChange, false);
     if (index > 0) {
       element.classList.add('hidden');
+      switchElement.classList.add('is-inactive');
     }
     tabList.append(switchElement)
   });
